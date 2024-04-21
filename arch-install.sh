@@ -27,6 +27,8 @@ PROGRAMS_TO_INSTALL=(
 	wget
 	openssh
 	github-cli
+	vim
+	neovim
 )
 
 # Functions
