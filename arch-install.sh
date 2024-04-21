@@ -50,11 +50,20 @@ internet_test() {
 install_yay() {
 	echo -e "${GREEN}[INFO] - Installing yay. ${DEFAULT}"
 	
-	sudo pacman -Syu yay
+	pacman_version=$(pacman --version | awk '{print $2}')
+
+	if [[ "${pacman_version}" == 6.0.* ]]; then
+		sudo pacman -Syu yay
+	else
+		git clone https://aur.archlinux.org/yay.git /tmp/yay
+		cd /tmp/yay
+		makepkg -sic
+	fi
+	
 	yay -Y --gendb
 	yay -Y --devel --save
-	yay -Syu --devel
-	
+	yay
+
 	echo -e "${GREEN}[INFO] - Package installed. ${DEFAULT}"
 }
 
@@ -84,7 +93,7 @@ install_docker_and_docker_compose() {
 install_git() {
 	echo -e "${GREEN}[INFO] - Installing git. ${DEFAULT}"
 	
-	yay -S git
+	sudo pacman -S git
 	git config --global user.name "ikidon"
 	git config --global user.email "ikidon.cc@gmail.com"
 	git config --global init.defaultBranch main
@@ -98,6 +107,12 @@ install_asdf() {
 	
 	git clone "https://github.com/asdf-vm/asdf.git" ${HOME}/.asdf --branch v0.14.0
 	cd ${HOME}/.asdf
+	sourcead -p "${GREEN}[INFO] - To finish the settings, please restart your PC. Restart now? ${DEFAULT}" option
+
+	if [ "${option}" = "y" ]; then
+		echo "${GREEN}[INFO] - Restarting... ${DEFAULT}"
+		sudo reboot
+	fi
 	source /opt/asdf-vm/asdf.fish
 	echo "source /opt/asdf-vm/asdf.fish" >> ${HOME}/.config/fish/config.fish
 	
@@ -107,9 +122,9 @@ install_asdf() {
 install_softwares() {
 	echo -e "${GREEN}[INFO] - Installing softwares. ${DEFAULT}"
 	
+	install_git
 	install_yay
 	install_fish_shell
-	install_git
 	install_asdf
 	install_docker_and_docker_compose
 
