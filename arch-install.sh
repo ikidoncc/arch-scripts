@@ -107,12 +107,6 @@ install_asdf() {
 	
 	git clone "https://github.com/asdf-vm/asdf.git" ${HOME}/.asdf --branch v0.14.0
 	cd ${HOME}/.asdf
-	sourcead -p "${GREEN}[INFO] - To finish the settings, please restart your PC. Restart now? ${DEFAULT}" option
-
-	if [ "${option}" = "y" ]; then
-		echo "${GREEN}[INFO] - Restarting... ${DEFAULT}"
-		sudo reboot
-	fi
 	source /opt/asdf-vm/asdf.fish
 	echo "source /opt/asdf-vm/asdf.fish" >> ${HOME}/.config/fish/config.fish
 	
